@@ -19,17 +19,16 @@ build:
 
 requirements:
   build:
-    - python
+    - python >=3.6,<4
     - pip
-    - cython
-    - setuptools >18.0
+    - setuptools >=38.6.0
     - setuptools_scm >1.5.4
   run:
-    - python
+    - python >=3.6,<4
     - asciitree
     - numpy >=1.7
     - fasteners
-    - numcodecs >=0.6.2
+    - numcodecs >=0.6.4
 
 test:
   requires:
