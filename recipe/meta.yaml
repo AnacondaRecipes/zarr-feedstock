@@ -33,6 +33,7 @@ requirements:
 
 test:
   requires:
+    - pip
     - pytest
     # Needs `pkg_resources` in the tests
     # xref: https://github.com/zarr-developers/zarr-python/pull/813
@@ -40,6 +41,7 @@ test:
   imports:
     - zarr
   commands:
+    - pip check
     - pytest -v --pyargs zarr
 
 about:
