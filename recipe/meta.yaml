@@ -18,7 +18,7 @@ build:
   script: {{PYTHON}} -m pip install --no-deps --ignore-installed .
 
 requirements:
-  build:
+  host:
     - python
     - pip
     - setuptools
@@ -54,7 +54,7 @@ about:
     Zarr is a format for the storage of chunked, compressed, N-dimensional arrays. 
     These documents describe the Zarr format and its Python implementation.
   dev_url: https://github.com/zarr-developers/zarr-python
-  doc_url: https://zarr.readthedocs.io/en/stable/
+  doc_url: https://zarr.readthedocs.io/
 
 extra:
   recipe-maintainers:
