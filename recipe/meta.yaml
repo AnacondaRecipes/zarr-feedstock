@@ -1,6 +1,6 @@
 {% set name = "zarr" %}
-{% set version = "2.8.1" %}
-{% set sha256 = "138e5f64bbaf7aece6da1f229b611a7a04742e15358dde49c6e9bae8404a3bf2" %}
+{% set version = "2.13.3" %}
+{% set sha256 = "db24b090616c638f65e33a6bc5d956d642221182961515ccbc28b17fb0d0b48c" %}
 
 package:
   name: {{ name|lower }}
@@ -13,36 +13,48 @@ source:
 
 build:
   number: 0
-  noarch: python
+  # numcodecs >=0.10.0 is not available on s390x
+  skip: True  # [py<38 or s390x]
   script: {{PYTHON}} -m pip install --no-deps --ignore-installed .
-  skip: True # [ppc64le]
 
 requirements:
-  build:
-    - python >=3.6,<4
+  host:
+    - python
     - pip
-    - setuptools >=38.6.0
-    - setuptools_scm >1.5.4
+    - setuptools
+    - setuptools_scm
+    - wheel
   run:
-    - python >=3.6,<4
+    - python
     - asciitree
     - numpy >=1.7
     - fasteners
-    - numcodecs >=0.6.4
+    - numcodecs >=0.10.0
 
 test:
   requires:
+    - pip
     - pytest
+    # Needs `pkg_resources` in the tests
+    # xref: https://github.com/zarr-developers/zarr-python/pull/813
+    - setuptools
   imports:
     - zarr
   commands:
+    - pip check
     - pytest -v --pyargs zarr
 
 about:
-  home: https://github.com/zarr-developers/zarr
+  home: https://github.com/zarr-developers/zarr-python
   license: MIT
+  license_family: MIT
   license_file: LICENSE
   summary: An implementation of chunked, compressed, N-dimensional arrays for Python.
+  description: |
+    Zarr is a format for the storage of chunked, compressed, N-dimensional arrays. 
+    These documents describe the Zarr format and its Python implementation.
+  dev_url: https://github.com/zarr-developers/zarr-python
+  doc_url: https://zarr.readthedocs.io/
 
 extra:
   recipe-maintainers:
