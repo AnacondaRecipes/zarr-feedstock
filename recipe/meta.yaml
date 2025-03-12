@@ -39,14 +39,12 @@ requirements:
     - cupy-cuda12x
 
 
-# Test randomly failed on different platforms.
+# Tests randomly failed on different platforms. Ignore tests with deadline.
 #>               raise DeadlineExceeded(
 #                    datetime.timedelta(seconds=runtime), self.settings.deadline
 #                )
 #E               hypothesis.errors.DeadlineExceeded: Test took 245.69ms, which exceeds the deadline of 200.00ms
-{% set deselect_tests = " --deselect=tests/test_properties.py::test_basic_indexing" %}
-{% set ignore_tests = "" %}
-{% set ignore_tests = ignore_tests + " --ignore=tests/test_properties.py" %}  # [win]
+{% set ignore_tests = " --ignore=tests/test_properties.py" %}
 
 test:
   source_files:
@@ -55,7 +53,7 @@ test:
     - zarr
   commands:
     - pip check
-    - pytest -v {{ deselect_tests }} {{ ignore_tests }} tests --asyncio-mode=auto
+    - pytest -v {{ ignore_tests }} tests --asyncio-mode=auto
   requires:
     - pip
     - coverage
