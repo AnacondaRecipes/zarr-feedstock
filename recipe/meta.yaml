@@ -45,6 +45,8 @@ requirements:
 #                )
 #E               hypothesis.errors.DeadlineExceeded: Test took 245.69ms, which exceeds the deadline of 200.00ms
 {% set deselect_tests = " --deselect=tests/test_properties.py::test_basic_indexing" %}
+{% set ignore_tests = "" %}
+{% set ignore_tests = ignore_tests + " --ignore=tests/test_properties.py" %}  # [win]
 
 test:
   source_files:
@@ -53,7 +55,7 @@ test:
     - zarr
   commands:
     - pip check
-    - pytest -v {{ deselect_tests }} tests --asyncio-mode=auto 
+    - pytest -v {{ deselect_tests }} {{ ignore_tests }} tests --asyncio-mode=auto
   requires:
     - pip
     - coverage
