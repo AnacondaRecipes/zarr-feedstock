@@ -38,6 +38,14 @@ requirements:
     # gpu
     - cupy-cuda12x
 
+
+# Test randomly failed on different platforms.
+#>               raise DeadlineExceeded(
+#                    datetime.timedelta(seconds=runtime), self.settings.deadline
+#                )
+#E               hypothesis.errors.DeadlineExceeded: Test took 245.69ms, which exceeds the deadline of 200.00ms
+{% set deselect_tests = " --deselect=tests/test_properties.py::test_basic_indexing" %}
+
 test:
   source_files:
     - tests
@@ -45,7 +53,7 @@ test:
     - zarr
   commands:
     - pip check
-    - pytest -v tests --asyncio-mode=auto
+    - pytest -v {{ deselect_tests }} tests --asyncio-mode=auto 
   requires:
     - pip
     - coverage
