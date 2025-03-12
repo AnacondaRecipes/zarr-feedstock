@@ -1,37 +1,46 @@
 {% set name = "zarr" %}
-{% set version = "2.13.3" %}
-{% set sha256 = "db24b090616c638f65e33a6bc5d956d642221182961515ccbc28b17fb0d0b48c" %}
+{% set version = "3.0.5" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.gz
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: {{ sha256 }}
+  sha256: 4ac0a09d66875d398ab53c95fd4bddca2f3d757a04454831fc2d54bfbafcb7e5
 
 build:
   number: 0
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   # numcodecs >=0.10.0 is not available on s390x
-  skip: True  # [py<38 or s390x]
-  script: {{PYTHON}} -m pip install --no-deps --ignore-installed .
+  skip: True  # [py<311 or s390x]
 
 requirements:
   host:
     - python
     - pip
-    - setuptools
-    - setuptools_scm
-    - wheel
+    - hatchling
+    - hatch-vcs
   run:
     - python
-    - asciitree
-    - numpy >=1.7
-    - fasteners
-    - numcodecs >=0.10.0
+    - packaging >=22.0
+    - numpy >=1.25
+    # numcodecs[crc32c]>=0.14
+    - numcodecs >=0.14
+    - crc32c >=2.7
+    - typing-extensions >=4.9
+    - donfig >=0.8
+  run_constrained:
+    - rich
+    - universal-pathlib
+    # remote
+    - fsspec>=2023.10.0
+    # gpu
+    - cupy-cuda12x
 
 test:
+  #source_files:
+  #  - tests
   requires:
     - pip
     - pytest
