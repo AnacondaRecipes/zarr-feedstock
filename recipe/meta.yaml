@@ -39,19 +39,23 @@ requirements:
     - cupy-cuda12x
 
 test:
-  #source_files:
-  #  - tests
-  requires:
-    - pip
-    - pytest
-    # Needs `pkg_resources` in the tests
-    # xref: https://github.com/zarr-developers/zarr-python/pull/813
-    - setuptools
+  source_files:
+    - tests
   imports:
     - zarr
   commands:
     - pip check
-    - pytest -v --pyargs zarr
+    - pytest -v tests --asyncio-mode=auto
+  requires:
+    - pip
+    - coverage
+    - pytest
+    - pytest-asyncio
+    - botocore
+    - s3fs
+    - requests
+    - rich
+    - hypothesis
 
 about:
   home: https://github.com/zarr-developers/zarr-python
