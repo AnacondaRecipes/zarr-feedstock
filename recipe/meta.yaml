@@ -1,54 +1,69 @@
 {% set name = "zarr" %}
-{% set version = "2.13.3" %}
-{% set sha256 = "db24b090616c638f65e33a6bc5d956d642221182961515ccbc28b17fb0d0b48c" %}
+{% set version = "3.0.5" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.gz
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: {{ sha256 }}
+  sha256: 4ac0a09d66875d398ab53c95fd4bddca2f3d757a04454831fc2d54bfbafcb7e5
 
 build:
   number: 0
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   # numcodecs >=0.10.0 is not available on s390x
-  skip: True  # [py<38 or s390x]
-  script: {{PYTHON}} -m pip install --no-deps --ignore-installed .
+  skip: True  # [py<311 or s390x]
 
 requirements:
   host:
     - python
     - pip
-    - setuptools
-    - setuptools_scm
-    - wheel
+    - hatchling
+    - hatch-vcs
   run:
     - python
-    - asciitree
-    - numpy >=1.7
-    - fasteners
-    - numcodecs >=0.10.0
+    - packaging >=22.0
+    - numpy >=1.25
+    # numcodecs[crc32c]>=0.14
+    - numcodecs >=0.14
+    - crc32c >=2.7
+    - typing-extensions >=4.9
+    - donfig >=0.8
+  run_constrained:
+    - fsspec>=2023.10.0
+
+# Tests randomly failed on different platforms. Ignore tests with deadline.
+#>               raise DeadlineExceeded(
+#                    datetime.timedelta(seconds=runtime), self.settings.deadline
+#                )
+#E               hypothesis.errors.DeadlineExceeded: Test took 245.69ms, which exceeds the deadline of 200.00ms
+{% set ignore_tests = " --ignore=tests/test_properties.py" %}
 
 test:
-  requires:
-    - pip
-    - pytest
-    # Needs `pkg_resources` in the tests
-    # xref: https://github.com/zarr-developers/zarr-python/pull/813
-    - setuptools
+  source_files:
+    - tests
   imports:
     - zarr
   commands:
     - pip check
-    - pytest -v --pyargs zarr
+    - pytest -v {{ ignore_tests }} tests --asyncio-mode=auto
+  requires:
+    - pip
+    - coverage
+    - pytest
+    - pytest-asyncio
+    - botocore
+    - s3fs
+    - requests
+    - rich
+    - hypothesis
 
 about:
   home: https://github.com/zarr-developers/zarr-python
   license: MIT
   license_family: MIT
-  license_file: LICENSE
+  license_file: LICENSE.txt
   summary: An implementation of chunked, compressed, N-dimensional arrays for Python.
   description: |
     Zarr is a format for the storage of chunked, compressed, N-dimensional arrays. 
