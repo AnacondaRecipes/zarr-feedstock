@@ -30,6 +30,8 @@ requirements:
     - crc32c >=2.7
     - typing-extensions >=4.9
     - donfig >=0.8
+    # cli app
+    - typer
   run_constrained:
     - fsspec >=2023.10.0
 
@@ -61,16 +63,15 @@ test:
     - pip check
     - zarr --help
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
-    - pytest -v {{ ignore_tests }} tests --asyncio-mode=auto
+    - pytest -ra -vv {{ ignore_tests }} tests --asyncio-mode=auto
   requires:
     - pip
-    - coverage
-    - pytest
+    - coverage >=7.10
+    - pytest <8.4
     - pytest-asyncio
     - botocore
     - s3fs
     - requests
-    - rich
     - hypothesis
     - typer
     - numpydoc
