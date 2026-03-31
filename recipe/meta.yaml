@@ -1,18 +1,24 @@
 {% set name = "zarr" %}
-{% set version = "3.1.3" %}
+{% set version = "3.1.6" %}
+{% set ignore_tests = " --ignore=tests/test_properties.py" %}
 
+# Tests randomly failed on different platforms. Ignore tests with deadline.
+#>               raise DeadlineExceeded(
+#                    datetime.timedelta(seconds=runtime), self.settings.deadline
+#                )
+#E               hypothesis.errors.DeadlineExceeded: Test took 245.69ms, which exceeds the deadline of 200.00ms
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 01342f3e26a02ed5670db608a5576fbdb8d76acb5c280bd2d0082454b1ba6f79
+  sha256: d95e72cbea4b90e9a70679468b8266400331756232576ae2b43400ac5108d0eb
 
 build:
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vvv
-  skip: True  # [py<311]
+  skip: true  # [py<311]
   entry_points:
     - zarr = zarr._cli.cli:app
 
@@ -34,13 +40,6 @@ requirements:
     - typer
   run_constrained:
     - fsspec >=2023.10.0
-
-# Tests randomly failed on different platforms. Ignore tests with deadline.
-#>               raise DeadlineExceeded(
-#                    datetime.timedelta(seconds=runtime), self.settings.deadline
-#                )
-#E               hypothesis.errors.DeadlineExceeded: Test took 245.69ms, which exceeds the deadline of 200.00ms
-{% set ignore_tests = " --ignore=tests/test_properties.py" %}
 
 test:
   source_files:
@@ -84,7 +83,7 @@ about:
   license_file: LICENSE.txt
   summary: An implementation of chunked, compressed, N-dimensional arrays for Python.
   description: |
-    Zarr is a format for the storage of chunked, compressed, N-dimensional arrays. 
+    Zarr is a format for the storage of chunked, compressed, N-dimensional arrays.
     These documents describe the Zarr format and its Python implementation.
   dev_url: https://github.com/zarr-developers/zarr-python
   doc_url: https://zarr.readthedocs.io
