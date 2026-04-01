@@ -1,5 +1,5 @@
 {% set name = "zarr" %}
-{% set version = "3.1.3" %}
+{% set version = "3.1.6" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 01342f3e26a02ed5670db608a5576fbdb8d76acb5c280bd2d0082454b1ba6f79
+  sha256: d95e72cbea4b90e9a70679468b8266400331756232576ae2b43400ac5108d0eb
 
 build:
   number: 0
@@ -20,34 +20,28 @@ requirements:
   host:
     - python
     - pip
-    - hatchling >=1.27.0
+    - hatchling >=1.29.0
     - hatch-vcs
   run:
     - python
     - packaging >=22.0
-    - numpy >=1.26
+    - numpy >=2.0
     - numcodecs >=0.14
-    - crc32c >=2.7
-    - typing-extensions >=4.9
+    - google-crc32c >=1.5
+    - typing-extensions >=4.12
     - donfig >=0.8
     # cli app
     - typer
   run_constrained:
     - fsspec >=2023.10.0
 
-# Tests randomly failed on different platforms. Ignore tests with deadline.
-#>               raise DeadlineExceeded(
-#                    datetime.timedelta(seconds=runtime), self.settings.deadline
-#                )
-#E               hypothesis.errors.DeadlineExceeded: Test took 245.69ms, which exceeds the deadline of 200.00ms
-{% set ignore_tests = " --ignore=tests/test_properties.py" %}
+{% set ignore_tests = " --ignore=tests/benchmarks/test_indexing.py" %}
 
 test:
   source_files:
     - tests
   imports:
     - zarr
-    - zarr._version
     - zarr.abc
     - zarr.api
     - zarr.buffer
@@ -63,11 +57,11 @@ test:
     - pip check
     - zarr --help
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
-    - pytest -ra -vv {{ ignore_tests }} tests --asyncio-mode=auto
+    - pytest -ra -vv tests -k "not slow and not (test_script_paths or test_write_array or test_read_array)" {{ ignore_tests }} --asyncio-mode=auto
   requires:
     - pip
     - coverage >=7.10
-    - pytest <8.4
+    - pytest
     - pytest-asyncio
     - botocore
     - s3fs
