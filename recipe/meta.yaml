@@ -34,6 +34,7 @@ requirements:
     - typer
   run_constrained:
     - fsspec >=2023.10.0
+    - obstore >=0.5.1
 
 {% set ignore_tests = " --ignore=tests/benchmarks/test_indexing.py" %}
 
