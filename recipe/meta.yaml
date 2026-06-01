@@ -1,5 +1,5 @@
 {% set name = "zarr" %}
-{% set version = "3.1.6" %}
+{% set version = "3.2.1" %}
 
 package:
   name: {{ name|lower }}
@@ -7,12 +7,12 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: d95e72cbea4b90e9a70679468b8266400331756232576ae2b43400ac5108d0eb
+  sha256: 71565b738a0e7e8ed226f0516eba8c6bb53440ad7669a8c48ebb3534a161d035
 
 build:
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vvv
-  skip: True  # [py<311]
+  skip: True  # [py<312]
   entry_points:
     - zarr = zarr._cli.cli:app
 
@@ -28,7 +28,7 @@ requirements:
     - numpy >=2.0
     - numcodecs >=0.14
     - google-crc32c >=1.5
-    - typing-extensions >=4.12
+    - typing-extensions >=4.13
     - donfig >=0.8
     # cli app
     - typer
