@@ -1,5 +1,5 @@
 {% set name = "zarr" %}
-{% set version = "3.2.1" %}
+{% set version = "3.3.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,12 +7,12 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 71565b738a0e7e8ed226f0516eba8c6bb53440ad7669a8c48ebb3534a161d035
+  sha256: cd0c8cf738b4bb4807815bc1255acad5bdf1a7b7264b606c5a1bc0d0392a306b
 
 build:
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vvv
-  skip: True  # [py<312]
+  skip: true  # [py<312]
   entry_points:
     - zarr = zarr._cli.cli:app
 
@@ -25,10 +25,10 @@ requirements:
   run:
     - python
     - packaging >=22.0
-    - numpy >=2.0
+    - numpy >=2
     - numcodecs >=0.14
     - google-crc32c >=1.5
-    - typing-extensions >=4.13
+    - typing_extensions >=4.14
     - donfig >=0.8
     # cli app
     - typer
@@ -79,7 +79,7 @@ about:
   license_file: LICENSE.txt
   summary: An implementation of chunked, compressed, N-dimensional arrays for Python.
   description: |
-    Zarr is a format for the storage of chunked, compressed, N-dimensional arrays. 
+    Zarr is a format for the storage of chunked, compressed, N-dimensional arrays.
     These documents describe the Zarr format and its Python implementation.
   dev_url: https://github.com/zarr-developers/zarr-python
   doc_url: https://zarr.readthedocs.io
