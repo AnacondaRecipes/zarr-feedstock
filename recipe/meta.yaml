@@ -1,5 +1,6 @@
 {% set name = "zarr" %}
-{% set version = "3.3.0" %}
+{% set version = "3.4.0" %}
+{% set ignore_tests = " --ignore=tests/benchmarks/test_indexing.py" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +8,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: cd0c8cf738b4bb4807815bc1255acad5bdf1a7b7264b606c5a1bc0d0392a306b
+  sha256: b68676576a6fc42683dfcc0daeb3c0e994f71e1680696990bde056bd3acf3542
 
 build:
   number: 0
@@ -32,11 +33,11 @@ requirements:
     - donfig >=0.8
     # cli app
     - typer
+    - msgspec >=0.19
   run_constrained:
     - fsspec >=2023.10.0
     - obstore >=0.5.1
-
-{% set ignore_tests = " --ignore=tests/benchmarks/test_indexing.py" %}
+    - cast-value-rs >=0.4.2
 
 test:
   source_files:
