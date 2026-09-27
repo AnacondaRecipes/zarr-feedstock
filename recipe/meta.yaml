@@ -1,6 +1,5 @@
 {% set name = "zarr" %}
 {% set version = "3.4.0" %}
-{% set ignore_tests = " --ignore=tests/benchmarks/test_indexing.py" %}
 
 package:
   name: {{ name|lower }}
@@ -38,6 +37,8 @@ requirements:
     - fsspec >=2023.10.0
     - obstore >=0.5.1
     - cast-value-rs >=0.4.2
+
+{% set ignore_tests = " --ignore=tests/benchmarks/test_indexing.py" %}
 
 test:
   source_files:
